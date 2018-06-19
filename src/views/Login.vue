@@ -18,6 +18,10 @@
     </div>
 </template>
 <script>
+/* eslint-disable */
+import Cookies from 'js-cookie'
+import http from '../config/http'
+
 export default {
   name: 'Login',
   data() {
@@ -31,18 +35,15 @@ export default {
   methods: {
       login() {
           let data = this.body
-          if((this.body.email != null && this.body.email != null) && (this.$refs.email.checkHtml5Validity() && this.$refs.password.checkHtml5Validity())) {              
-              fetch('http://pay4you-club.umbler.net/v1/users/authenticate', {
-                    method: 'post',
-                    body: data,
-                    mode: 'no-cors'
+          if((this.body.email != null && this.body.email != null) && (this.$refs.email.checkHtml5Validity() && this.$refs.password.checkHtml5Validity())) {   
+              http.post('/users/authenticate', data)
+                .then((response) => {
+                    Cookies.set('pay_auth', response.data.token)
+                    console.log(this);                    
                 })
-                .then(function(response) {
-                    console.log(response);
-                })
-                .catch(function(error) {
-                    console.log('Request failed', error)
-                });
+                .catch((error)  => {
+                    console.log(error);
+                });           
           }
       }
   }
