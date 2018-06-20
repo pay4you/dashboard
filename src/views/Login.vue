@@ -48,8 +48,26 @@ export default {
                     console.log(error);
                 });           
           }
-      }
-  }
+      },
+      getEstablishments () {
+            http.get('/establishments')
+                .then(establishments => {
+                    this.$store.dispatch('setActiveEstablishment', establishments.data.items[0])
+                    this.$store.dispatch('setEstablishments', establishments.data)                
+                })
+        },
+  },
+  beforeMount () {
+        http.get('/users/profile')
+            .then(user => {
+                delete user.data.success
+                if(user.data.isRoot) {
+                    this.getEstablishments()
+                }
+                this.$store.dispatch('setProfile', user.data)  
+                this.$router.push({name: 'orders'})
+            })
+    }
 }
 </script>
 <style>

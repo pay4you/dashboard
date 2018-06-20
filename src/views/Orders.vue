@@ -2,7 +2,7 @@
     <div>
         <h1>Pedidos</h1>
         <button class="button">Adicionar Pedido</button>
-        <div class="columns" v-if="products.length > 0">
+        <div class="columns" v-if="orders.length > 0">
             <div class="column" v-for="(order, index) in orders" :key="index">
                 <order-item :item="order"></order-item>
             </div>
