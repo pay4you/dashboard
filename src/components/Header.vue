@@ -1,21 +1,18 @@
 <template>
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
-            <img src="https://avatars1.githubusercontent.com/u/37130397?s=400&u=4c5f5703e092b65ce4e60b47fa5228111b11beb1&v=4" alt="Bulma: a modern CSS framework based on Flexbox">
-            </a>
+            <div class="navbar-item">
+                <img src="../assets/logo.png" alt="Pay4You" height="20px">
+            </div>
         </div>
-        <div class="navbar-menu">
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link" href="/documentation/overview/start/">
-                    Docs
+        <div class="navbar-menu" v-show="establishments.items.length != 0">
+            <div :class="['navbar-item', 'has-dropdown', 'is-hoverable']">
+                <a class="navbar-link" href="javascript:void(0)">
+                    {{establishment.social_name}}
                 </a>
-                <div class="navbar-dropdown is-boxed">
-                    <a class="navbar-item" href="/documentation/overview/start/">
-                        Overview
-                    </a>
-                    <a class="navbar-item" href="https://bulma.io/documentation/modifiers/syntax/">
-                        Modifiers
+                <div class="navbar-dropdown is-boxed" v-if="establishments.items.length > 1">
+                    <a class="navbar-item" href="javascript:void(0)" v-for="(estab, index) in establishments.items" :key="index" @click="setActiveEstablishment(estab)">
+                        {{estab.social_name}}
                     </a>
                 </div>
             </div>
@@ -24,3 +21,41 @@
         </div>
     </nav>
 </template>
+<script>
+import http from '../config/http'
+
+export default {
+    name: 'Header',
+    computed: {
+        establishment: function () {
+            return this.$store.state.establishment
+        },
+        establishments: function () {
+            return this.$store.state.establishments
+        }
+    },
+    beforeMount () {
+        http.get('/users/profile')
+            .then(user => {
+                delete user.data.success
+                if(user.data.isRoot) {
+                    this.getEstablishments()
+                }
+                this.$store.dispatch('setProfile', user.data)                
+            })
+    },
+    methods: {
+        getEstablishments () {
+            http.get('/establishments')
+                .then(establishments => {
+                    this.$store.dispatch('setActiveEstablishment', establishments.data.items[0])
+                    this.$store.dispatch('setEstablishments', establishments.data)                
+                })
+        },
+        setActiveEstablishment (estab) {
+            this.$store.dispatch('setActiveEstablishment', estab)
+        }
+    }
+}
+</script>
+

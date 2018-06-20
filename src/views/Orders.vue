@@ -1,11 +1,13 @@
 <template>
     <div>
         <h1>Pedidos</h1>
-        <div class="columns">
+        <button class="button">Adicionar Pedido</button>
+        <div class="columns" v-if="products.length > 0">
             <div class="column" v-for="(order, index) in orders" :key="index">
                 <order-item :item="order"></order-item>
             </div>
         </div>
+        <p v-else>Não há pedidos</p>
     </div>
 </template>
 <script>
@@ -14,6 +16,11 @@
 
     export default {
         name: 'OrderList',
+        computed: {
+            establishment: function () {
+                return this.$store.state.establishment
+            }
+        },
         data () {
             return {
                 orders: []
@@ -23,7 +30,7 @@
             OrderItem
         },
         beforeMount () {
-            http.get('establishments/1/orders')
+            http.get(`establishments/${this.establishment.id}/orders`)
                 .then(response => {
                     this.orders = response.data.orders
                 })

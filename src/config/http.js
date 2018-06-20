@@ -1,6 +1,7 @@
 /* eslint-disable */
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import router from '../router'
 
 const http = axios.create({
   baseURL: 'http://pay4you-club.umbler.net/v1'
@@ -17,6 +18,9 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
+  if(error.response.status === 401) {
+    router.push({name: 'login'})
+  }
   return Promise.reject(error);
 });
 

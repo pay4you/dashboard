@@ -1,19 +1,22 @@
 <template>
-    <div class="container login_container">
+    <div class="login_container">
         <section class="login">
-            <b-field label="Email">
-                <b-input type="email"
-                    v-model="body.email" ref="email">
-                </b-input>
-            </b-field>
+            <div class="box">
+                <img src="../assets/logo.png" alt="Pay4You" class="logo">
+                <b-field label="Email">
+                    <b-input type="email"
+                        v-model="body.email" ref="email">
+                    </b-input>
+                </b-field>
 
-            <b-field label="Senha">
-                <b-input type="password"
-                    v-model="body.password"
-                    password-reveal ref="password">
-                </b-input>
-            </b-field>
-            <button class="button is-primary" @click="login">Login</button>
+                <b-field label="Senha">
+                    <b-input type="password"
+                        v-model="body.password"
+                        password-reveal ref="password">
+                    </b-input>
+                </b-field>
+                <button class="button is-success is-rounded" @click="login">Login</button>
+            </div>
         </section>
     </div>
 </template>
@@ -39,7 +42,7 @@ export default {
               http.post('/users/authenticate', data)
                 .then((response) => {
                     Cookies.set('pay_auth', response.data.token)
-                    console.log(this);                    
+                    this.$router.push({name: 'orders'})
                 })
                 .catch((error)  => {
                     console.log(error);
@@ -52,7 +55,13 @@ export default {
 <style>
 .login {
     display: block;
-    max-width: 500px;
+    max-width: 300px;
     margin: 10% auto;
+}
+.logo {
+    display: block;
+    margin: 1em auto;
+    width:75px;
+    height: auto;
 }
 </style>
