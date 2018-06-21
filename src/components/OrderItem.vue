@@ -20,8 +20,7 @@
             </div>
         </div>
         <footer class="card-footer">
-            <a href="#" class="card-footer-item">Concluir</a>
-            <a href="#" class="card-footer-item">Cancelar</a>
+            <a href="javascript:void(0)" class="card-footer-item" @click="closeOrder">Finalizar</a>
         </footer>
     </div>
 </template>
@@ -47,6 +46,14 @@
         data () {
             return {
                 products: []
+            }
+        },
+        methods: {
+            closeOrder () {
+                http.put(`/orders/${this.item.id}`, {status: 0})
+                    .then(order => {
+                        window.location.reload()
+                    })
             }
         },
         mounted () {

@@ -52,7 +52,6 @@
                     
                 </section>
                 <footer class="modal-card-foot">
-                    <button class="button" type="button" @click="$parent.close()">Cancelar</button>
                     <button class="button is-primary" @click="addProduct">Salvar</button>
                 </footer>
             </div>
@@ -84,7 +83,7 @@
             addProduct () {
                 http.post(`establishments/${this.establishment.id}/products`, this.body)
                 .then(response => {
-                    console.log(this.$modal);                    
+                    window.location.reload()                    
                 })
                 .catch(error => {
                     console.log(error)
