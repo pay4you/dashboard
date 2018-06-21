@@ -19,7 +19,7 @@
                 <p>Total: R$ {{totalPrice}}</p>
             </div>
         </div>
-        <footer class="card-footer">
+        <footer class="card-footer" v-if="this.item.status > 0">
             <a href="javascript:void(0)" class="card-footer-item" @click="closeOrder">Finalizar</a>
         </footer>
     </div>
